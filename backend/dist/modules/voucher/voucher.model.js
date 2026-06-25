@@ -1,0 +1,27 @@
+import mongoose, { Schema } from "mongoose";
+const VoucherSchema = new Schema({
+    userId: { type: Schema.Types.ObjectId, ref: "User" },
+    code: {
+        type: String,
+        required: true,
+        unique: true,
+        uppercase: true,
+        match: /^VCH-[A-Z0-9]{8}$/,
+    },
+    valueNaira: { type: Number, required: true, min: 1 },
+    type: { type: String },
+    minOrderValue: { type: Number, min: 0 },
+    status: {
+        type: String,
+        enum: ["active", "used", "expired"],
+        default: "active",
+    },
+    issuedAt: { type: Date, default: Date.now },
+    expiresAt: { type: Date, default: null },
+    usedAt: { type: Date, default: null },
+    buyerUserIds: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    isMarketplace: { type: Boolean, default: false },
+    priceInCoins: { type: Number, min: 0 },
+}, { timestamps: true });
+export const VoucherModel = mongoose.model("Voucher", VoucherSchema);
+//# sourceMappingURL=voucher.model.js.map

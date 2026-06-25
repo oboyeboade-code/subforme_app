@@ -1,0 +1,37 @@
+import mongoose, { Schema } from "mongoose";
+const ListingRequestSchema = new Schema({
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true, index: true },
+    businessName: { type: String, required: true },
+    contactName: { type: String, required: true },
+    email: { type: String, required: true },
+    phone: { type: String, required: true },
+    website: { type: String },
+    address: { type: String },
+    serviceName: { type: String, required: true },
+    category: { type: String, required: true },
+    pricing: { type: String, required: true },
+    estCodesPerMonth: { type: Number },
+    operatingHours: { type: String },
+    description: { type: String },
+    redemptionInstructions: { type: String },
+    payoutMethod: { type: String },
+    payoutName: { type: String },
+    bankName: { type: String },
+    accountNumber: { type: String },
+    mobileNumber: { type: String },
+    walletAddress: { type: String },
+    platformFee: { type: Number },
+    termsAccepted: { type: Boolean, required: true },
+    rejectionReason: { type: String },
+    status: {
+        type: String,
+        enum: ["pending", "approved", "rejected"],
+        default: "pending",
+        index: true,
+    },
+    reviewedBy: { type: Schema.Types.ObjectId, ref: "User" },
+    reviewedAt: { type: Date },
+    uiVersion: { type: String },
+}, { timestamps: true });
+export const ListingRequestModel = mongoose.model("ListingRequest", ListingRequestSchema);
+//# sourceMappingURL=listingRequest.model.js.map
