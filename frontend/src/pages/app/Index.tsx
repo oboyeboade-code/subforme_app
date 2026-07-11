@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowUpRight, Mail, Plus, Minus } from "lucide-react";
 import ContactSection from "@/components/app/ContactSection";
 import { AppLogo } from '@/components/app/SubformeLogo'
 import { api } from "@/lib/page/api";
+import { handleGuestLogin } from "@/lib/auth/loginHandler";
+import { useQueryClient } from "@tanstack/react-query";
+import { useUIVersion } from "@/components/uiversion/UIVersionContext";
 
 import type {
   LandingNavLink,
@@ -11,6 +14,7 @@ import type {
   Faq,
   ProviderCategoryCard,
 } from "@/lib/page/api";
+import GuestLoginFab from "@/components/GuestLoginFab";
 
 const Logo = () => (
   <Link to="/" className="flex items-center gap-3" aria-label="Subforme home">
@@ -25,6 +29,21 @@ const Index = () => {
   const [faqs, setFaqs] = useState<Faq[]>([]);
   const [providerCategories, setProviderCategories] = useState<ProviderCategoryCard[]>([]);
 
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
+    const { setVersion } = useUIVersion();
+
+  const guestLogin = (role: 'admin' | 'vendor' | 'customer' | 'super-admin') => {
+    handleGuestLogin({
+      role,
+      setLoading,
+      navigate,
+      queryClient,
+      useV3: true,
+      setVersion,
+    })
+  }
   useEffect(() => {
     api.getLandingNav().then(setNavLinks);
     api.getLandingSteps().then(setSteps);
@@ -390,6 +409,13 @@ const Index = () => {
           <span>Pay Without Struggle</span>
         </div>
       </footer>
+      <GuestLoginFab
+        disabled={loading}
+        onAdmin={() => guestLogin('admin')}
+        onVendor={() => guestLogin('vendor')}
+        onCustomer={() => guestLogin('customer')}
+        onSuperAdmin={() => guestLogin('super-admin')} // add this prop to GuestLoginFab
+      />
     </div>
   );
 };

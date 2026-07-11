@@ -70,3 +70,37 @@ export async function handleLogin({
     setLoading(false);
   }
 }
+
+// src/lib/auth/loginHandler.ts
+
+// Add this at the top
+const DEMO_CREDS = {
+  admin: { email: 'admin@demo.com', password: '12348765' },
+  vendor: { email: 'vendor@demo.com', password: '12348765' },
+  customer: { email: 'customer@demo.com', password: '12348765' },
+  'super-admin': { email: 'super@demo.com', password: '12348765' },
+} as const
+
+// Add this new function below handleLogin
+export async function handleGuestLogin({
+  role,
+  setLoading,
+  navigate,
+  queryClient,
+  useV3 = true,
+  setVersion,
+}: Omit<LoginParams, 'email' | 'password' | 'expectedRole' | 'successMessage'> & { role: Role }) {
+  const creds = DEMO_CREDS[role]
+
+  return handleLogin({
+    email: creds.email,
+    password: creds.password,
+    expectedRole: role,
+    setLoading,
+    navigate,
+    queryClient,
+    successMessage: `Logged in as ${role}`,
+    useV3,
+    setVersion,
+  })
+}

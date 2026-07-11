@@ -5,8 +5,7 @@ import {
   CircleSlash,
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-// import { vendorBusinessApi, userApi } from "@/lib/api/";
-import { vendorBusinessApi, userApi } from "@/lib/api/"; // Added userApi
+import { vendorBusinessApi, userApi } from "@/lib/api/";
 import {
   VendorHeroSkeleton,
   VendorCardsSkeleton,
